@@ -1,18 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String  @id @default(cuid()) @map("_id")
-  userId            String
+  id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -30,62 +27,90 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid()) @map("_id")
+  id           Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
+  id            Int       @id @default(autoincrement())
   name          String?
   email         String    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Post          Post[]
-  Comment       Comment[]
+  posts         Post[]
+  comments      Comment[]
 }
 
 model VerificationToken {
-  identifier String   @id @map("_id")
+  id         Int      @id @default(autoincrement())
+  identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
 }
 
-model Category {
-  id    String  @id @default(cuid()) @map("_id")
-  slug  String  @unique
-  title String
-  img   String?
-  Posts Post[]
+model Tag {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  posts PostTag[]
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+
+  post   Post @relation(fields: [postId], references: [id])
+  tag    Tag  @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId])
 }
 
 model Post {
-  id        String    @id @default(cuid()) @map("_id")
-  createdAt DateTime  @default(now())
-  slug      String    @unique
-  title     String
-  desc      String
-  img       String?
-  views     Int       @default(0)
-  seoTitle  String?
-  seoDesc   String?
-  seoKeywords    String?
-  catSlug   String
-  cat       Category  @relation(fields: [catSlug], references: [slug])
-  tags      String[]   // Mảng tag như ["react", "nextjs"]
-  userEmail String
-  user      User      @relation(fields: [userEmail], references: [email])
-  comments  Comment[]
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  slug         String    @unique
+  title        String
+  desc         String
+  img          String?
+  views        Int       @default(0)
+  isFeatured Boolean   @default(false) // 👈 cần nếu có `featured`
+  seoTitle     String?
+  seoDesc      String?
+  seoKeywords  String?
+  userEmail    String
+  user         User      @relation(fields: [userEmail], references: [email])
+  comments     Comment[]
+  tags         PostTag[]
+  categories   PostCategory[]  // 👈 Quan hệ nhiều-nhiều với Category
 }
 
+model Category {
+  id        Int             @id @default(autoincrement())
+  slug      String          @unique
+  title     String
+  img       String?
+  posts     PostCategory[]  // 👈 Quan hệ ngược lại với Post
+}
+
+model PostCategory {
+  postId     Int
+  categoryId Int
+
+  post       Post     @relation(fields: [postId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@id([postId, categoryId])
+}
+
+
 model Comment {
-  id        String   @id @default(cuid()) @map("_id")
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   desc      String
   userEmail String

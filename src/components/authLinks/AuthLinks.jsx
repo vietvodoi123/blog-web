@@ -3,9 +3,11 @@ import Link from "next/link";
 import styles from "./authLinks.module.css";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
+import { FaUserCircle } from "react-icons/fa";
 
 const AuthLinks = () => {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const { status } = useSession();
 
@@ -13,34 +15,45 @@ const AuthLinks = () => {
     <>
       {status === "unauthenticated" ? (
         <Link href="/login" className={styles.link}>
-          Login
+          Đăng nhập
         </Link>
       ) : (
-        <>
-          <Link href="/write" className={styles.link}>
-            Write
-          </Link>
-          <span className={styles.link} onClick={signOut}>
-            Logout
-          </span>
-        </>
+        <div className={styles.userMenu}>
+          <FaUserCircle
+            className={styles.userIcon}
+            onClick={() => setMenuOpen(!menuOpen)}
+          />
+          {menuOpen && (
+            <div className={styles.dropdown}>
+              <Link href="/write" className={styles.dropdownItem}>
+                Viết bài
+              </Link>
+              <span className={styles.dropdownItem} onClick={signOut}>
+                Đăng xuất
+              </span>
+            </div>
+          )}
+        </div>
       )}
-      <div className={styles.burger} onClick={() => setOpen(!open)}>
+
+      {/* Burger menu cho mobile */}
+      <div className={styles.burger} onClick={() => setMobileOpen(!mobileOpen)}>
         <div className={styles.line}></div>
         <div className={styles.line}></div>
         <div className={styles.line}></div>
       </div>
-      {open && (
+
+      {mobileOpen && (
         <div className={styles.responsiveMenu}>
-          <Link href="/">Homepage</Link>
-          <Link href="/">About</Link>
-          <Link href="/">Contact</Link>
-          {status === "notauthenticated" ? (
-            <Link href="/login">Login</Link>
+          <Link href="/">Trang chủ</Link>
+          <Link href="/about">Giới thiệu</Link>
+          <Link href="/contact">Liên hệ</Link>
+          {status === "unauthenticated" ? (
+            <Link href="/login">Đăng nhập</Link>
           ) : (
             <>
-              <Link href="/write">Write</Link>
-              <span className={styles.link}>Logout</span>
+              <Link href="/write">Viết bài</Link>
+              <span onClick={signOut}>Đăng xuất</span>
             </>
           )}
         </div>

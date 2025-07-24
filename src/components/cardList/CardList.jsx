@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./cardList.module.css";
 import Pagination from "../pagination/Pagination";
-import Image from "next/image";
 import Card from "../card/Card";
 
-const getData = async (page, cat) => {
+const getData = async (page, cat, perPage) => {
   const res = await fetch(
-    `http://localhost:3000/api/posts?page=${page}&cat=${cat || ""}`,
+    `http://localhost:3000/api/posts?page=${page}&cat=${
+      cat || ""
+    }&perPage=${perPage}`,
     {
       cache: "no-store",
     }
@@ -19,13 +20,11 @@ const getData = async (page, cat) => {
   return res.json();
 };
 
-const CardList = async ({ page, cat }) => {
-  const { posts, count } = await getData(page, cat);
+const CardList = async ({ page, cat, perPage = 10 }) => {
+  const { posts, count } = await getData(page, cat, perPage);
 
-  const POST_PER_PAGE = 2;
-
-  const hasPrev = POST_PER_PAGE * (page - 1) > 0;
-  const hasNext = POST_PER_PAGE * (page - 1) + POST_PER_PAGE < count;
+  const hasPrev = perPage * (page - 1) > 0;
+  const hasNext = perPage * (page - 1) + perPage < count;
 
   return (
     <div className={styles.container}>

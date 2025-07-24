@@ -1,41 +1,72 @@
-import React from "react";
+// components/CategoryList/CategoryList.tsx (Server Component)
 import styles from "./categoryList.module.css";
 import Link from "next/link";
-import Image from "next/image";
+
+const colors = [
+  "#D6EFFF",
+  "#FFD6E8",
+  "#D6FFD9",
+  "#FFE8D6",
+  "#FFF6D6",
+  "#E8D6FF",
+];
+
+const assignRandomColors = (categories) => {
+  return categories.map((item) => {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return {
+      ...item,
+      color: colors[randomIndex],
+    };
+  });
+};
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    "http://localhost:3000/api/categories?page=1&perPage=6",
+    {
+      cache: "no-store",
+    }
+  );
 
   if (!res.ok) {
-    throw new Error("Failed");
+    throw new Error("Failed to fetch categories");
   }
 
   return res.json();
 };
 
-const CategoryList = async () => {
-  const data = await getData();
+const CategoryList = async ({ initialCategories = [] }) => {
+  const hasInitial = initialCategories.length > 0;
+
+  let categories = [];
+
+  if (hasInitial) {
+    categories = assignRandomColors(initialCategories);
+  } else {
+    const { categories: fetchedCategories } = await getData();
+    categories = assignRandomColors(fetchedCategories);
+  }
+
+  if (!categories || categories.length === 0) return null;
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Popular Categories</h1>
-      <div className={styles.categories}>
-        {data?.map((item) => (
+      {initialCategories.length === 0 && (
+        <>
+          <p className={styles.subtitle}>Discover by topic</p>
+          <h2 className={styles.title}>Categories</h2>
+        </>
+      )}
+
+      <div className={styles.grid}>
+        {categories.map((item) => (
           <Link
-            href="/blog?cat=style"
-            className={`${styles.category} ${styles[item.slug]}`}
-            key={item._id}
+            href={`/blog?cat=${item.slug}`}
+            key={item.id}
+            className={styles.card}
+            style={{ backgroundColor: item.color }}
           >
-            {item.img && (
-              <Image
-                src={item.img}
-                alt=""
-                width={32}
-                height={32}
-                className={styles.image}
-              />
-            )}
             {item.title}
           </Link>
         ))}

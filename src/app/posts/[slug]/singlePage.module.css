@@ -1,94 +1,112 @@
-.infoContainer {
-  display: flex;
-  align-items: center;
-  gap: 50px;
+.container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 2rem 0;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-.textContainer {
-  flex: 1;
+/* Mặc định mobile-first: article và sidebar xếp dọc */
+.article {
+  flex: 1 1 100%;
+  max-width: 100%;
+  background-color: #fff;
+}
+
+.sidebar {
+  flex: 1 1 100%;
+  max-width: 100%;
+  margin-top: 2rem;
+  position: static;
+  height: auto;
+}
+
+/* Khi màn hình từ 768px trở lên thì chuyển sang 2 cột */
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Phần bài viết */
+.header {
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 1.5rem;
 }
 
 .title {
-  font-size: 64px;
-  margin-bottom: 50px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #222;
 }
 
-.user {
+.meta {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
-
-.userImageContainer {
-  width: 50px;
-  height: 50px;
-  position: relative;
+  margin-bottom: 1rem;
 }
 
 .avatar {
   border-radius: 50%;
+  margin-right: 1rem;
   object-fit: cover;
 }
 
-.userTextContainer {
+.metaText {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  color: var(--softTextColor);
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.username {
-  font-size: 20px;
-  font-weight: 500;
+.author {
+  font-weight: 600;
 }
 
-.imageContainer {
-  flex: 1;
-  height: 350px;
-  position: relative;
+.date {
+  font-style: italic;
+  color: #888;
+}
+
+.coverImage {
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .image {
+  width: 100%;
+  height: auto;
   object-fit: cover;
+  border-radius: 8px;
 }
 
 .content {
-  display: flex;
-  gap: 50px;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 2rem;
 }
 
-.post {
-  flex: 5;
-  margin-top: 60px;
+.content p {
+  margin-bottom: 1.5rem;
 }
 
-.description p {
-  font-size: 20px;
-  font-weight: 300;
-  margin-bottom: 20px;
+.content h2,
+.content h3 {
+  margin-top: 2rem;
+  color: #000;
 }
 
-@media screen and (max-width: 1536px) {
-  .title {
-    font-size: 54px;
-  }
+/* Comments */
+.comments {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 2rem;
 }
-@media screen and (max-width: 1280px) {
-  .title {
-    font-size: 48px;
-  }
-}
-@media screen and (max-width: 1024px) {
-  .imageContainer {
-    display: none;
-  }
-}
-@media screen and (max-width: 640px) {
-  .title {
-    font-size: 36px;
-  }
 
-  .description p{
-    font-size: 18px;
-  }
+.commentsTitle {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
 }

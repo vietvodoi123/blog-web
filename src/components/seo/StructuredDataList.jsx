@@ -2,12 +2,14 @@
 import React from "react";
 
 const StructuredDataList = ({ posts, cat }) => {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+
   const blogPostSchemas = posts.slice(0, 10).map((post) => ({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.desc || post.excerpt || "",
-    url: `https://thinknest.com/posts/${post.slug}`,
+    url: `${siteUrl}/posts/${post.slug}`,
     datePublished: post.createdAt,
     author: {
       "@type": "Person",
@@ -18,10 +20,10 @@ const StructuredDataList = ({ posts, cat }) => {
       name: "ThinkNest",
       logo: {
         "@type": "ImageObject",
-        url: "https://thinknest.com/logo.png",
+        url: `${siteUrl}/logo.png`,
       },
     },
-    image: post.img || "https://thinknest.com/default-thumb.jpg",
+    image: post.img || `${siteUrl}/default-thumb.jpg`,
   }));
 
   const jsonLd =

@@ -4,7 +4,8 @@ import React from "react";
 const StructuredData = ({ post }) => {
   if (!post) return null;
 
-  // Gộp các từ khóa từ tags + categories + seoKeywords
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+
   const tagNames = post.tags?.map((tag) => tag.name) || [];
   const categoryTitles = post.categories?.map((cat) => cat.title) || [];
   const rawKeywords = post.seoKeywords
@@ -20,7 +21,7 @@ const StructuredData = ({ post }) => {
     headline: post.seoTitle || post.title,
     description:
       post.seoDesc || post.desc?.replace(/<[^>]+>/g, "").slice(0, 160),
-    image: post.img || "https://thinknest.com/og-image.jpg",
+    image: post.img || `${siteUrl}/og-image.jpg`,
     datePublished: post.createdAt,
     dateModified: post.updatedAt || post.createdAt,
     author: {
@@ -33,12 +34,12 @@ const StructuredData = ({ post }) => {
       name: "ThinkNest",
       logo: {
         "@type": "ImageObject",
-        url: "https://thinknest.com/logo.png", // Cập nhật logo nếu bạn có
+        url: `${siteUrl}/logo.png`,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://thinknest.com/posts/${post.slug}`,
+      "@id": `${siteUrl}/posts/${post.slug}`,
     },
     articleSection: categoryTitles.join(", "),
     keywords: keywords.join(", "),

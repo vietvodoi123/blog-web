@@ -60,3 +60,36 @@ export const GET = async (req, { params }) => {
     );
   }
 };
+
+export const PATCH = async (req, { params }) => {
+  const { param } = params;
+
+  try {
+    const body = await req.json();
+
+    // Chỉ cho phép cập nhật các trường được định nghĩa
+    const allowedFields = ["isFeatured", "title", "desc", "slug", "img"];
+    const dataToUpdate = {};
+
+    for (const key of allowedFields) {
+      if (body.hasOwnProperty(key)) {
+        dataToUpdate[key] = body[key];
+      }
+    }
+
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: Number(param), // đảm bảo param là ID
+      },
+      data: dataToUpdate,
+    });
+
+    return new NextResponse(JSON.stringify(updatedPost), { status: 200 });
+  } catch (err) {
+    console.error("PATCH post error:", err);
+    return new NextResponse(
+      JSON.stringify({ message: "Lỗi khi cập nhật bài viết!" }),
+      { status: 500 }
+    );
+  }
+};

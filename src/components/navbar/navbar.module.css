@@ -39,8 +39,14 @@
   text-align: center;
   text-decoration: none;
   color: #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  row-gap: 10px;
 }
-
+.iconbrain {
+  color: palevioletred;
+}
 .links {
   display: flex;
   gap: 20px;

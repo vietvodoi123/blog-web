@@ -4,51 +4,37 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthLinks from "../authLinks/AuthLinks";
 import ThemeToggle from "../themeToggle/ThemeToggle";
+import { FaBrain } from "react-icons/fa";
 
 const Navbar = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.left}>
         <div className={styles.social}>
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link href="#" target="_blank" rel="noopener noreferrer">
             <Image src="/facebook.png" alt="facebook" width={20} height={20} />
-          </a>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </Link>
+          <Link href="#" target="_blank" rel="noopener noreferrer">
             <Image
               src="/instagram.png"
               alt="instagram"
               width={20}
               height={20}
             />
-          </a>
-          <a
-            href="https://tiktok.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </Link>
+          <Link href="#" target="_blank" rel="noopener noreferrer">
             <Image src="/tiktok.png" alt="tiktok" width={20} height={20} />
-          </a>
-          <a
-            href="https://youtube.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </Link>
+          <Link href="#" target="_blank" rel="noopener noreferrer">
             <Image src="/youtube.png" alt="youtube" width={20} height={20} />
-          </a>
+          </Link>
         </div>
       </div>
 
       <div className={styles.center}>
         <Link href="/" className={styles.logo}>
-          BaoTin24h
+          <FaBrain className={styles.iconbrain} />
+          ThinkNest
         </Link>
       </div>
 
@@ -58,10 +44,10 @@ const Navbar = () => {
           <Link href="/" className={styles.link}>
             Trang chủ
           </Link>
-          <Link href="/contact" className={styles.link}>
+          <Link href="#" className={styles.link}>
             Liên hệ
           </Link>
-          <Link href="/about" className={styles.link}>
+          <Link href="#" className={styles.link}>
             Giới thiệu
           </Link>
         </nav>
